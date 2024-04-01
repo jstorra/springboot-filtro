@@ -18,4 +18,9 @@ public class TipoContenidoController {
     public Map<Object, Object> guardarTipoContenido(@RequestBody TipoContenido tipoContenido) {
         return tipoContenidoService.guardarTipoContenido(tipoContenido);
     }
+
+    @PostMapping("/agregarPlataforma")
+    public Map<Object, Object> agregarPlataforma(@RequestBody Map<Object, Object> valores) {
+        return tipoContenidoService.agregarPlataforma(valores);
+    }
 }

@@ -1,6 +1,8 @@
 package jstorra.filtro.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jstorra.filtro.models.dto.ContenidoDTO;
 
 @Entity
 @Table(name = "contenidos")
@@ -39,6 +41,7 @@ public class Contenido {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
+    @JsonIgnore
     private Usuario usuario;
 
     public Integer getId() {
