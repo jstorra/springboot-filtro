@@ -36,12 +36,62 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(GeneroYaIngresado.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleGeneroYaIngresado(GeneroYaIngresado ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Generos iguales", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidOperation.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleInvalidOperation(InvalidOperation ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Operacion no valida", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidEstado.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleEstadoNotFound(InvalidEstado ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Registro no encontrado", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(TipoContenidoNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> handleTipoContenidoNotFound(TipoContenidoNotFound ex) {
         ErrorResponses errorResponse = new ErrorResponses("Registro no encontrado", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ContenidoNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleContenidoNotFound(ContenidoNotFound ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Registro no encontrado", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(GeneroNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleGeneroNotFound(GeneroNotFound ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Registro no encontrado", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PlataformaNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handlePlataformaNotFound(PlataformaNotFound ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Registro no encontrado", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UsuarioNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleUsuarioNotFound(UsuarioNotFound ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Registro no encontrado", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
 
 
 }

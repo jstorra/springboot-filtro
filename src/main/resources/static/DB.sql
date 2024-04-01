@@ -40,7 +40,7 @@ CREATE TABLE contenidos (
     genero2_id INT,
     estado ENUM("pendiente", "viendo", "terminado", "abandonado", "en pausa") NOT NULL,
     plataforma_id INT NOT NULL,
-    calificacion DECIMAL(2,1) NOT NULL,
+    calificacion DECIMAL(3,1) NOT NULL,
     comentario TEXT NOT NULL,
     usuario_id INT NOT NULL,
     FOREIGN KEY (tipo_id) REFERENCES tipocontenidos(id),

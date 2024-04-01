@@ -2,7 +2,6 @@ package jstorra.filtro.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jstorra.filtro.models.dto.ContenidoDTO;
 
 @Entity
 @Table(name = "contenidos")
@@ -34,7 +33,7 @@ public class Contenido {
     private Plataforma plataforma;
 
     @Column(name = "calificacion", nullable = false)
-    private double calificacion;
+    private Double calificacion;
 
     @Column(name = "comentario", nullable = false)
     private String comentario;
@@ -100,11 +99,11 @@ public class Contenido {
         this.plataforma = plataforma;
     }
 
-    public double getCalificacion() {
+    public Double getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(double calificacion) {
+    public void setCalificacion(Double calificacion) {
         this.calificacion = calificacion;
     }
 

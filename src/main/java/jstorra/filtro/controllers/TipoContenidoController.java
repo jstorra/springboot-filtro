@@ -14,7 +14,7 @@ public class TipoContenidoController {
     @Autowired
     TipoContenidoService tipoContenidoService;
 
-    @PostMapping()
+    @PostMapping
     public Map<Object, Object> guardarTipoContenido(@RequestBody TipoContenido tipoContenido) {
         return tipoContenidoService.guardarTipoContenido(tipoContenido);
     }
