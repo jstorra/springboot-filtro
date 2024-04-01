@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/usuario")
 @CrossOrigin("*")
 @PreAuthorize("hasRole('ADMIN')")
 @SecurityRequirement(name = "bearerAuth")
@@ -42,7 +43,7 @@ public class UsuarioController {
         return usuarioService.registrarUsuario(new Usuario(nombre, email, contraseña, null));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public Map<Object, Object> eliminarUsuario(@PathVariable Object id) {
         return usuarioService.eliminarUsuario(id);
     }
