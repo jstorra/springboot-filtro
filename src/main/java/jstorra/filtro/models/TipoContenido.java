@@ -1,5 +1,6 @@
 package jstorra.filtro.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -20,6 +21,7 @@ public class TipoContenido {
     @JoinTable(name = "tipocontenido_plataforma",
             joinColumns = @JoinColumn(name = "tipo_id"),
             inverseJoinColumns = @JoinColumn(name = "plataforma_id"))
+    @JsonIgnore
     private Set<Plataforma> plataformas;
 
     public Integer getId() {

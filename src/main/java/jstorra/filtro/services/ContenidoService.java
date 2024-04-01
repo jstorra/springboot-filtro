@@ -46,7 +46,7 @@ public class ContenidoService {
         contenido.setGenero1(genero1);
 
         if (contenidoDTO.getGenero2_id() != null) {
-            Genero genero2 = generoRepository.findById(contenidoDTO.getGenero1_id())
+            Genero genero2 = generoRepository.findById(contenidoDTO.getGenero2_id())
                     .orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
 
             contenido.setGenero2(genero2);
@@ -64,7 +64,7 @@ public class ContenidoService {
 
         contenido.setPlataforma(plataforma);
 
-        if (contenidoDTO.getCalificacion() != null && contenidoDTO.getComentario() != null && (contenidoDTO.getEstado().equalsIgnoreCase("Abandonado") || contenidoDTO.getEstado().equalsIgnoreCase("Terminado"))) {
+        if (contenidoDTO.getCalificacion() != null || contenidoDTO.getComentario() != null && (contenidoDTO.getEstado().equalsIgnoreCase("Abandonado") || contenidoDTO.getEstado().equalsIgnoreCase("Terminado"))) {
             contenido.setCalificacion(contenidoDTO.getCalificacion());
             contenido.setComentario(contenidoDTO.getComentario());
         } else {

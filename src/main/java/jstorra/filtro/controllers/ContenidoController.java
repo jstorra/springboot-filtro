@@ -1,8 +1,10 @@
 package jstorra.filtro.controllers;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jstorra.filtro.models.dto.ContenidoDTO;
 import jstorra.filtro.services.ContenidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -10,6 +12,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/contenido")
 @CrossOrigin("*")
+@PreAuthorize("hasRole('ADMIN')")
+@SecurityRequirement(name = "bearerAuth")
 public class ContenidoController {
     @Autowired
     ContenidoService contenidoService;

@@ -34,8 +34,8 @@ public class Usuario {
     public Usuario(){
     }
 
-    public Usuario(String nombre, String contraseña, String token) {
-        this.nombre = nombre;
+    public Usuario(String email, String contraseña, String token) {
+        this.email = email;
         this.contraseña = contraseña;
         this.token = token;
     }
@@ -85,5 +85,13 @@ public class Usuario {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<Contenido> getContenidos() {
+        return contenidos;
+    }
+
+    public void setContenidos(List<Contenido> contenidos) {
+        this.contenidos = contenidos;
     }
 }

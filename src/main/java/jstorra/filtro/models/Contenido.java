@@ -32,10 +32,10 @@ public class Contenido {
     @JoinColumn(name = "plataforma_id", nullable = false)
     private Plataforma plataforma;
 
-    @Column(name = "calificacion", nullable = false)
+    @Column(name = "calificacion")
     private Double calificacion;
 
-    @Column(name = "comentario", nullable = false)
+    @Column(name = "comentario")
     private String comentario;
 
     @ManyToOne

@@ -50,6 +50,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidUsuarioException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleInvalidUserException(InvalidUsuarioException ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Operacion no valida", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UsuarioDuplicateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Object> handleUsuarioDuplicateException(UsuarioDuplicateException ex) {
+        ErrorResponses errorResponse = new ErrorResponses("Registro duplicado", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(InvalidEstado.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> handleEstadoNotFound(InvalidEstado ex) {
@@ -91,7 +105,4 @@ public class GlobalExceptionHandler {
         ErrorResponses errorResponse = new ErrorResponses("Registro no encontrado", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
-
-
-
 }
