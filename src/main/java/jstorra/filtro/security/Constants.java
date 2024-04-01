@@ -8,8 +8,8 @@ import java.security.Key;
 
 public class Constants {
     // Spring Security
-    public static final String LOGIN_URL = "/ingresar";
-    public static final String REGISTER_URL = "/registrar";
+    public static final String LOGIN_URL = "usuario/ingresar";
+    public static final String REGISTER_URL = "usuario/registrar";
     public static final String HEADER_AUTHORIZACION_KEY = "Authorization";
     public static final String TOKEN_BEARER_PREFIX = "Bearer ";
 
