@@ -68,7 +68,7 @@ public class UsuarioService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            Usuario usuario = usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
+            usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
             usuarioToUpdate.setId(parsedId);
             registrarUsuario(usuarioToUpdate);
             return new LinkedHashMap<>() {{
@@ -83,7 +83,7 @@ public class UsuarioService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            Usuario usuario = usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
+            usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
 
             usuarioRepository.deleteById(parsedId);
 

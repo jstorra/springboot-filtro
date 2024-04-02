@@ -11,7 +11,9 @@ import jstorra.filtro.repositories.TipoContenidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -22,19 +24,38 @@ public class PlataformaService {
     @Autowired
     TipoContenidoRepository tipoContenidoRepository;
 
+    public List<Map<Object, Object>> mostrarPlataformas() {
+        try {
+            List<Map<Object, Object>> plataformasResponse = new ArrayList<>();
+            List<Plataforma> plataformas = plataformaRepository.findAll();
+            plataformas.stream().forEach(plt -> {
+                Map<Object, Object> plataforma = new LinkedHashMap<>();
+                plataforma.put("id", plt.getId());
+                plataforma.put("nombre", plt.getNombre());
+                plataforma.put("tipoContenidos", plt.getTipocontenidos());
+                plataformasResponse.add(plataforma);
+            });
+            return plataformasResponse;
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
     public Map<Object, Object> guardarPlataforma(Plataforma plataforma) {
         try {
             plataformaRepository.save(plataforma);
-            return new LinkedHashMap<>() {{
-                put("message", "La plataforma ha sido registrada.");
-            }};
+            return new LinkedHashMap<>() {
+                {
+                    put("message", "La plataforma ha sido registrada.");
+                }
+            };
         } catch (Exception e) {
             throw new PlataformaDuplicateException("La plataforma ingresada ya existe.");
         }
     }
 
     @Transactional
-    public Map<Object, Object>  agregarTipoContenido(Map<Object, Object> valores) {
+    public Map<Object, Object> agregarTipoContenido(Map<Object, Object> valores) {
         try {
             int tipoId = Integer.parseInt(valores.get("tipo_id").toString());
             int plataformaId = Integer.parseInt(valores.get("plataforma_id").toString());
@@ -48,9 +69,11 @@ public class PlataformaService {
             tipoContenido.getPlataformas().add(plataforma);
             plataforma.getTipocontenidos().add(tipoContenido);
 
-            return new LinkedHashMap<>() {{
-                put("message", "Se ha agregado el tipo de contenido a la plataforma.");
-            }};
+            return new LinkedHashMap<>() {
+                {
+                    put("message", "Se ha agregado el tipo de contenido a la plataforma.");
+                }
+            };
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }

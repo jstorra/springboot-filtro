@@ -3,8 +3,6 @@ package jstorra.filtro.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,10 +15,8 @@ public class TipoContenido {
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    @ManyToMany
-    @JoinTable(name = "tipocontenido_plataforma",
-            joinColumns = @JoinColumn(name = "tipo_id"),
-            inverseJoinColumns = @JoinColumn(name = "plataforma_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tipocontenido_plataforma", joinColumns = @JoinColumn(name = "tipo_id"), inverseJoinColumns = @JoinColumn(name = "plataforma_id"))
     @JsonIgnore
     private Set<Plataforma> plataformas;
 

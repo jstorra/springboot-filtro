@@ -3,7 +3,6 @@ package jstorra.filtro.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,7 +15,7 @@ public class Plataforma {
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    @ManyToMany(mappedBy = "plataformas")
+    @ManyToMany(mappedBy = "plataformas", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<TipoContenido> tipocontenidos;
 

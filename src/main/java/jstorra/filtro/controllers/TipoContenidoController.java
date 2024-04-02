@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,6 +18,11 @@ import java.util.Map;
 public class TipoContenidoController {
     @Autowired
     TipoContenidoService tipoContenidoService;
+
+    @GetMapping
+    public List<Map<Object, Object>> mostrarTiposContenido() {
+        return tipoContenidoService.mostrarTiposContenido();
+    }
 
     @PostMapping
     public Map<Object, Object> guardarTipoContenido(@RequestBody TipoContenido tipoContenido) {

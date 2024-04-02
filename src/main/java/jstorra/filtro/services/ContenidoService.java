@@ -142,7 +142,7 @@ public class ContenidoService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            Contenido contenido = contenidoRepository.findById(parsedId).orElseThrow(() -> new ContenidoNotFound("El contenido ingresado no existe."));
+            contenidoRepository.findById(parsedId).orElseThrow(() -> new ContenidoNotFound("El contenido ingresado no existe."));
             contenidoDTO.setId(parsedId);
             guardarContenido(contenidoDTO);
             return new LinkedHashMap<>() {{
@@ -157,7 +157,7 @@ public class ContenidoService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            Contenido contenido = contenidoRepository.findById(parsedId).orElseThrow(() -> new ContenidoNotFound("El contenido ingresado no existe."));
+            contenidoRepository.findById(parsedId).orElseThrow(() -> new ContenidoNotFound("El contenido ingresado no existe."));
 
             contenidoRepository.deleteById(parsedId);
 

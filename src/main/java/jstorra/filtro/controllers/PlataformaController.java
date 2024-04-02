@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,6 +18,11 @@ import java.util.Map;
 public class PlataformaController {
     @Autowired
     PlataformaService plataformaService;
+
+    @GetMapping
+    public List<Map<Object, Object>> mostrarPlataformas() {
+        return plataformaService.mostrarPlataformas();
+    }
 
     @PostMapping
     public Map<Object, Object> guardarPlataforma(@RequestBody Plataforma plataforma) {

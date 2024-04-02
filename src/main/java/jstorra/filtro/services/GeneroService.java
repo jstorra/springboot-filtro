@@ -7,7 +7,6 @@ import jstorra.filtro.models.Genero;
 import jstorra.filtro.repositories.GeneroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,28 +17,23 @@ public class GeneroService {
     @Autowired
     GeneroRepository generoRepository;
 
-    public List<Genero> obtenerGeneros() {
-        return generoRepository.findAll();
-    }
-
-    public Genero obtenerGeneroPorId(@PathVariable Object id) {
+    public List<Genero> mostrarGeneros() {
         try {
-            int parsedId = Integer.parseInt(id.toString());
-
-            Genero genero = generoRepository.findById(parsedId).orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
-
-            return genero;
-        } catch (NumberFormatException e) {
-            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
+            List<Genero> generos = generoRepository.findAll();
+            return generos;
+        } catch (Exception e) {
         }
+        return null;
     }
 
     public Map<Object, Object> guardarGenero(Genero genero) {
         try {
             generoRepository.save(genero);
-            return new LinkedHashMap<>() {{
-                put("message", "El genero ha sido registrado.");
-            }};
+            return new LinkedHashMap<>() {
+                {
+                    put("message", "El genero ha sido registrado.");
+                }
+            };
         } catch (Exception e) {
             throw new GeneroDuplicateException("El genero ingresado ya existe.");
         }
@@ -49,7 +43,7 @@ public class GeneroService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            Genero genero = generoRepository.findById(parsedId).orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
+            generoRepository.findById(parsedId).orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
             generoToUpdate.setId(parsedId);
             guardarGenero(generoToUpdate);
 
@@ -65,8 +59,7 @@ public class GeneroService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            Genero genero = generoRepository.findById(parsedId).orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
-
+            generoRepository.findById(parsedId).orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
             generoRepository.deleteById(parsedId);
 
             return new LinkedHashMap<>() {{
