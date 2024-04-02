@@ -12,7 +12,6 @@ import jstorra.filtro.repositories.TipoContenidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,31 +24,41 @@ public class PlataformaService {
     @Autowired
     TipoContenidoRepository tipoContenidoRepository;
 
-    public List<Map<Object, Object>> mostrarPlataformas() {
+    public List<Map<Object, Object>> obtenerPlataformas() {
+        return plataformaRepository.findAll().stream()
+                .map(plataforma -> {
+                    Map<Object, Object> plataformaMap = new LinkedHashMap<>();
+                    plataformaMap.put("id", plataforma.getId());
+                    plataformaMap.put("nombre", plataforma.getNombre());
+                    plataformaMap.put("tipoContenidos", plataforma.getTipoContenidos());
+                    return plataformaMap;
+                }).toList();
+    }
+
+    public Map<Object, Object> obtenerPlataformaPorId(Object id) {
         try {
-            List<Map<Object, Object>> plataformasResponse = new ArrayList<>();
-            List<Plataforma> plataformas = plataformaRepository.findAll();
-            plataformas.stream().forEach(plt -> {
-                Map<Object, Object> plataforma = new LinkedHashMap<>();
-                plataforma.put("id", plt.getId());
-                plataforma.put("nombre", plt.getNombre());
-                plataforma.put("tipoContenidos", plt.getTipocontenidos());
-                plataformasResponse.add(plataforma);
-            });
-            return plataformasResponse;
-        } catch (Exception e) {
+            int parsedId = Integer.parseInt(id.toString());
+
+            Plataforma plataforma = plataformaRepository.findById(parsedId)
+                    .orElseThrow(() -> new PlataformaNotFound("La plataforma ingresada no existe."));
+
+            return new LinkedHashMap<>() {{
+                put("id", plataforma.getId());
+                put("nombre", plataforma.getNombre());
+                put("tipoContenidos", plataforma.getTipoContenidos());
+            }};
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
-        return null;
     }
 
     public Map<Object, Object> guardarPlataforma(Plataforma plataforma) {
         try {
             plataformaRepository.save(plataforma);
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "La plataforma ha sido registrada.");
-                }
-            };
+
+            return new LinkedHashMap<>() {{
+                put("message", "La plataforma ha sido registrada.");
+            }};
         } catch (Exception e) {
             throw new PlataformaDuplicateException("La plataforma ingresada ya existe.");
         }
@@ -59,16 +68,14 @@ public class PlataformaService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            plataformaRepository.findById(parsedId)
-                    .orElseThrow(() -> new PlataformaNotFound("La plataforma ingresada no existe."));
+            plataformaRepository.findById(parsedId).orElseThrow(() -> new PlataformaNotFound("La plataforma ingresada no existe."));
 
             plataformaToUpdate.setId(parsedId);
             guardarPlataforma(plataformaToUpdate);
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "La plataforma ha sido actualizado.");
-                }
-            };
+
+            return new LinkedHashMap<>() {{
+                put("message", "La plataforma ha sido actualizada.");
+            }};
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
@@ -87,13 +94,11 @@ public class PlataformaService {
                     .orElseThrow(() -> new TipoContenidoNotFound("La plataforma ingresada no existe."));
 
             tipoContenido.getPlataformas().add(plataforma);
-            plataforma.getTipocontenidos().add(tipoContenido);
+            plataforma.getTipoContenidos().add(tipoContenido);
 
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "Se ha agregado el tipo de contenido a la plataforma.");
-                }
-            };
+            return new LinkedHashMap<>() {{
+                put("message", "Se ha agregado el tipo de contenido a la plataforma.");
+            }};
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
@@ -103,15 +108,13 @@ public class PlataformaService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            plataformaRepository.findById(parsedId)
-                    .orElseThrow(() -> new PlataformaNotFound("La plataforma ingresada no existe."));
+            plataformaRepository.findById(parsedId).orElseThrow(() -> new PlataformaNotFound("La plataforma ingresada no existe."));
+
             plataformaRepository.deleteById(parsedId);
 
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "La plataforma ha sido eliminada.");
-                }
-            };
+            return new LinkedHashMap<>() {{
+                put("message", "La plataforma ha sido eliminada.");
+            }};
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }

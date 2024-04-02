@@ -17,14 +17,14 @@ public class UsuarioService {
     UsuarioRepository usuarioRepository;
 
     public List<Map<Object, Object>> obtenerUsuarios() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        return usuarios.stream()
+        return usuarioRepository.findAll().stream()
                 .map(usuario -> {
                     Map<Object, Object> usuarioMap = new LinkedHashMap<>();
                     usuarioMap.put("id", usuario.getId());
                     usuarioMap.put("nombre", usuario.getNombre());
                     usuarioMap.put("email", usuario.getEmail());
                     usuarioMap.put("contraseña", usuario.getContraseña());
+                    usuarioMap.put("contenidos", usuario.getContenidos());
                     return usuarioMap;
                 })
                 .toList();
@@ -35,11 +35,13 @@ public class UsuarioService {
             int parsedId = Integer.parseInt(id.toString());
 
             Usuario usuario = usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
+
             return new LinkedHashMap<>() {{
                 put("id", usuario.getId());
                 put("nombre", usuario.getNombre());
                 put("email", usuario.getEmail());
                 put("contraseña", usuario.getContraseña());
+                put("contenidos", usuario.getContenidos());
             }};
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
@@ -48,6 +50,7 @@ public class UsuarioService {
 
     public void validacionUsuario(String email, String contraseña) {
         Usuario usuario = usuarioRepository.findByEmail(email);
+
         if (usuario == null || !usuario.getContraseña().equalsIgnoreCase(contraseña)) {
             throw new InvalidUsuarioException("Las credenciales ingresadas no son validas.");
         }
@@ -56,6 +59,7 @@ public class UsuarioService {
     public Map<Object, Object> registrarUsuario(Usuario usuario) {
         try {
             usuarioRepository.save(usuario);
+
             return new LinkedHashMap<>() {{
                 put("message", "EL usuario ha sido registrado.");
             }};
@@ -69,8 +73,10 @@ public class UsuarioService {
             int parsedId = Integer.parseInt(id.toString());
 
             usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
+
             usuarioToUpdate.setId(parsedId);
             registrarUsuario(usuarioToUpdate);
+
             return new LinkedHashMap<>() {{
                 put("message", "El usuario ha sido actualizado.");
             }};

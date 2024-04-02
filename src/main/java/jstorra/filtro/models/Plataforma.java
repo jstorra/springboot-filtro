@@ -17,7 +17,7 @@ public class Plataforma {
 
     @ManyToMany(mappedBy = "plataformas", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<TipoContenido> tipocontenidos;
+    private Set<TipoContenido> tipoContenidos;
 
     public Integer getId() {
         return id;
@@ -35,11 +35,11 @@ public class Plataforma {
         this.nombre = nombre;
     }
 
-    public Set<TipoContenido> getTipocontenidos() {
-        return tipocontenidos;
+    public Set<TipoContenido> getTipoContenidos() {
+        return tipoContenidos;
     }
 
-    public void setTipocontenidos(Set<TipoContenido> tipocontenidos) {
-        this.tipocontenidos = tipocontenidos;
+    public void setTipoContenidos(Set<TipoContenido> tipoContenidos) {
+        this.tipoContenidos = tipoContenidos;
     }
 }

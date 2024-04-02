@@ -28,8 +28,7 @@ public class ContenidoService {
     UsuarioRepository usuarioRepository;
 
     public List<Map<Object, Object>> obtenerContenidos() {
-        List<Contenido> contenidos = contenidoRepository.findAll();
-        return contenidos.stream()
+        return contenidoRepository.findAll().stream()
                 .map(contenido -> {
                     Map<Object, Object> contenidoMap = new LinkedHashMap<>();
                     contenidoMap.put("id", contenido.getId());
@@ -57,8 +56,6 @@ public class ContenidoService {
             int parsedId = Integer.parseInt(id.toString());
 
             Contenido contenido = contenidoRepository.findById(parsedId).orElseThrow(() -> new ContenidoNotFound("El contenido ingresado no existe."));
-
-            contenidoRepository.deleteById(parsedId);
 
             return new LinkedHashMap<>() {{
                 put("id", contenido.getId());
@@ -121,9 +118,11 @@ public class ContenidoService {
         contenido.setPlataforma(plataforma);
 
         if ((contenidoDTO.getCalificacion() != null || contenidoDTO.getComentario() != null) && (contenidoDTO.getEstado().equalsIgnoreCase("Abandonado") || contenidoDTO.getEstado().equalsIgnoreCase("Terminado"))) {
-            contenido.setCalificacion(contenidoDTO.getCalificacion());
-            contenido.setComentario(contenidoDTO.getComentario());
-        } else {
+
+            contenido.setCalificacion(contenidoDTO.getCalificacion() != null ? contenidoDTO.getCalificacion() : null);
+            contenido.setComentario(contenidoDTO.getComentario() != null ? contenidoDTO.getComentario() : null);
+
+        } else if ((contenidoDTO.getCalificacion() != null || contenidoDTO.getComentario() != null) && !(contenidoDTO.getEstado().equalsIgnoreCase("Abandonado") || contenidoDTO.getEstado().equalsIgnoreCase("Terminado"))) {
             throw new InvalidOperation("No se puede asignar califacion ni comentario sí el estado no es Terminado o Abandonado.");
         }
 
@@ -133,6 +132,7 @@ public class ContenidoService {
         contenido.setUsuario(usuario);
 
         contenidoRepository.save(contenido);
+
         return new LinkedHashMap<>() {{
             put("message", "El contenido ha sido registrado.");
         }};
@@ -143,8 +143,10 @@ public class ContenidoService {
             int parsedId = Integer.parseInt(id.toString());
 
             contenidoRepository.findById(parsedId).orElseThrow(() -> new ContenidoNotFound("El contenido ingresado no existe."));
+
             contenidoDTO.setId(parsedId);
             guardarContenido(contenidoDTO);
+
             return new LinkedHashMap<>() {{
                 put("message", "El contenido ha sido actualizado.");
             }};

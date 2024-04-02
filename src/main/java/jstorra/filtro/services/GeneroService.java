@@ -17,23 +17,27 @@ public class GeneroService {
     @Autowired
     GeneroRepository generoRepository;
 
-    public List<Genero> mostrarGeneros() {
+    public List<Genero> obtenerGeneros() {
+        return generoRepository.findAll();
+    }
+
+    public Genero obtenerGeneroPorId(Object id) {
         try {
-            List<Genero> generos = generoRepository.findAll();
-            return generos;
-        } catch (Exception e) {
+            int parsedId = Integer.parseInt(id.toString());
+
+            return generoRepository.findById(parsedId).orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
-        return null;
     }
 
     public Map<Object, Object> guardarGenero(Genero genero) {
         try {
             generoRepository.save(genero);
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "El genero ha sido registrado.");
-                }
-            };
+
+            return new LinkedHashMap<>() {{
+                put("message", "El genero ha sido registrado.");
+            }};
         } catch (Exception e) {
             throw new GeneroDuplicateException("El genero ingresado ya existe.");
         }
@@ -44,6 +48,7 @@ public class GeneroService {
             int parsedId = Integer.parseInt(id.toString());
 
             generoRepository.findById(parsedId).orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
+
             generoToUpdate.setId(parsedId);
             guardarGenero(generoToUpdate);
 
@@ -60,6 +65,7 @@ public class GeneroService {
             int parsedId = Integer.parseInt(id.toString());
 
             generoRepository.findById(parsedId).orElseThrow(() -> new GeneroNotFound("El genero ingresado no existe."));
+
             generoRepository.deleteById(parsedId);
 
             return new LinkedHashMap<>() {{

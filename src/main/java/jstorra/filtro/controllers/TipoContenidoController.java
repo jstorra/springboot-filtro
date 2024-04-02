@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("tipocontenido")
+@RequestMapping("tipoContenido")
 @CrossOrigin("*")
 @PreAuthorize("hasRole('ADMIN')")
 @SecurityRequirement(name = "bearerAuth")
@@ -20,8 +20,13 @@ public class TipoContenidoController {
     TipoContenidoService tipoContenidoService;
 
     @GetMapping
-    public List<Map<Object, Object>> mostrarTiposContenido() {
-        return tipoContenidoService.mostrarTiposContenido();
+    public List<Map<Object, Object>> obtenerTiposContenido() {
+        return tipoContenidoService.obtenerTiposContenido();
+    }
+
+    @GetMapping("/{id}")
+    public Map<Object, Object> obtenerTiposContenidoPorId(@PathVariable Object id) {
+        return tipoContenidoService.obtenerTiposContenidoPorId(id);
     }
 
     @PostMapping
@@ -42,5 +47,10 @@ public class TipoContenidoController {
     @DeleteMapping("/{id}")
     public Map<Object, Object> eliminarTipoContenido(@PathVariable Object id) {
         return tipoContenidoService.eliminarTipoContenido(id);
+    }
+
+    @GetMapping("/{id}/plataformasApropiadas")
+    public List<String> plataformasApropiadas(@PathVariable Object id) {
+        return tipoContenidoService.plataformasApropiadas(id);
     }
 }

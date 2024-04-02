@@ -20,8 +20,13 @@ public class GeneroController {
     GeneroService generoService;
 
     @GetMapping
-    public List<Genero> mostrarGeneros() {
-        return generoService.mostrarGeneros();
+    public List<Genero> obtenerGeneros() {
+        return generoService.obtenerGeneros();
+    }
+
+    @GetMapping("/{id}")
+    public Genero obtenerGeneroPorId(@PathVariable Object id) {
+        return generoService.obtenerGeneroPorId(id);
     }
 
     @PostMapping

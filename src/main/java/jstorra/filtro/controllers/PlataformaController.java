@@ -20,8 +20,13 @@ public class PlataformaController {
     PlataformaService plataformaService;
 
     @GetMapping
-    public List<Map<Object, Object>> mostrarPlataformas() {
-        return plataformaService.mostrarPlataformas();
+    public List<Map<Object, Object>> obtenerPlataformas() {
+        return plataformaService.obtenerPlataformas();
+    }
+
+    @GetMapping("/{id}")
+    public Map<Object, Object> obtenerPlataformaPorId(@PathVariable Object id) {
+        return plataformaService.obtenerPlataformaPorId(id);
     }
 
     @PostMapping

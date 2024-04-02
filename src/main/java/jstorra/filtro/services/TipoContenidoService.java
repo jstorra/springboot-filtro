@@ -11,7 +11,6 @@ import jstorra.filtro.repositories.TipoContenidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,31 +23,40 @@ public class TipoContenidoService {
     @Autowired
     PlataformaRepository plataformaRepository;
 
-    public List<Map<Object, Object>> mostrarTiposContenido() {
+    public List<Map<Object, Object>> obtenerTiposContenido() {
+        return tipoContenidoRepository.findAll().stream()
+                .map(tipoContenido -> {
+                    Map<Object, Object> tipoContenidoMap = new LinkedHashMap<>();
+                    tipoContenidoMap.put("id", tipoContenido.getId());
+                    tipoContenidoMap.put("nombre", tipoContenido.getNombre());
+                    tipoContenidoMap.put("plataformas", tipoContenido.getPlataformas());
+                    return tipoContenidoMap;
+                }).toList();
+    }
+
+    public Map<Object, Object> obtenerTiposContenidoPorId(Object id) {
         try {
-            List<Map<Object, Object>> tipoContenidoResponse = new ArrayList<>();
-            List<TipoContenido> tipoContenidos = tipoContenidoRepository.findAll();
-            tipoContenidos.stream().forEach(tco -> {
-                Map<Object, Object> tipo = new LinkedHashMap<>();
-                tipo.put("id", tco.getId());
-                tipo.put("nombre", tco.getNombre());
-                tipo.put("plataformas", tco.getPlataformas());
-                tipoContenidoResponse.add(tipo);
-            });
-            return tipoContenidoResponse;
-        } catch (Exception e) {
+            int parsedId = Integer.parseInt(id.toString());
+
+            TipoContenido tipoContenido = tipoContenidoRepository.findById(parsedId)
+                    .orElseThrow(() -> new TipoContenidoNotFound("El tipo de contenido ingresado no existe."));
+
+            return new LinkedHashMap<>() {{
+                put("id", tipoContenido.getId());
+                put("nombre", tipoContenido.getNombre());
+                put("plataformas", tipoContenido.getPlataformas());
+            }};
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
-        return null;
     }
 
     public Map<Object, Object> guardarTipoContenido(TipoContenido tipoContenido) {
         try {
             tipoContenidoRepository.save(tipoContenido);
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "El tipo de contenido ha sido registrado.");
-                }
-            };
+            return new LinkedHashMap<>() {{
+                put("message", "El tipo de contenido ha sido registrado.");
+            }};
         } catch (Exception e) {
             throw new TipoContenidoDuplicateException("El tipo de contenido ingresado ya existe.");
         }
@@ -58,17 +66,14 @@ public class TipoContenidoService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            TipoContenido tipoContenidoFound = tipoContenidoRepository.findById(parsedId)
-                    .orElseThrow(() -> new TipoContenidoNotFound("El tipo de contenido ingresado no existe."));
+            tipoContenidoRepository.findById(parsedId).orElseThrow(() -> new TipoContenidoNotFound("El tipo de contenido ingresado no existe."));
 
             tipoContenidoToUpdate.setId(parsedId);
-            tipoContenidoToUpdate.setPlataformas(tipoContenidoFound.getPlataformas());
             guardarTipoContenido(tipoContenidoToUpdate);
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "El tipo de contenido ha sido actualizado.");
-                }
-            };
+
+            return new LinkedHashMap<>() {{
+                put("message", "El tipo de contenido ha sido actualizado.");
+            }};
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
@@ -87,13 +92,11 @@ public class TipoContenidoService {
                     .orElseThrow(() -> new TipoContenidoNotFound("La plataforma ingresada no existe."));
 
             tipoContenido.getPlataformas().add(plataforma);
-            plataforma.getTipocontenidos().add(tipoContenido);
+            plataforma.getTipoContenidos().add(tipoContenido);
 
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "Se ha agregado la plataforma al tipo de contenido.");
-                }
-            };
+            return new LinkedHashMap<>() {{
+                put("message", "Se ha agregado la plataforma al tipo de contenido.");
+            }};
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
@@ -103,15 +106,25 @@ public class TipoContenidoService {
         try {
             int parsedId = Integer.parseInt(id.toString());
 
-            tipoContenidoRepository.findById(parsedId)
-                    .orElseThrow(() -> new TipoContenidoNotFound("El tipo contenido ingresado no existe."));
+            tipoContenidoRepository.findById(parsedId).orElseThrow(() -> new TipoContenidoNotFound("El tipo de contenido ingresado no existe."));
+
             tipoContenidoRepository.deleteById(parsedId);
 
-            return new LinkedHashMap<>() {
-                {
-                    put("message", "El tipo contenido ha sido eliminado.");
-                }
-            };
+            return new LinkedHashMap<>() {{
+                put("message", "El tipo de contenido ha sido eliminado.");
+            }};
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
+        }
+    }
+
+    public List<String> plataformasApropiadas(Object id) {
+        try {
+            int parsedId = Integer.parseInt(id.toString());
+
+            tipoContenidoRepository.findById(parsedId).orElseThrow(() -> new TipoContenidoNotFound("El tipo de contenido ingresado no existe."));
+
+            return tipoContenidoRepository.plataformasApropiadas(parsedId);
         } catch (NumberFormatException e) {
             throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
