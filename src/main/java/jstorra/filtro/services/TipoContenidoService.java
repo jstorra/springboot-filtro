@@ -54,6 +54,26 @@ public class TipoContenidoService {
         }
     }
 
+    public Map<Object, Object> editarTipoContenido(Object id, TipoContenido tipoContenidoToUpdate) {
+        try {
+            int parsedId = Integer.parseInt(id.toString());
+
+            TipoContenido tipoContenidoFound = tipoContenidoRepository.findById(parsedId)
+                    .orElseThrow(() -> new TipoContenidoNotFound("El tipo de contenido ingresado no existe."));
+
+            tipoContenidoToUpdate.setId(parsedId);
+            tipoContenidoToUpdate.setPlataformas(tipoContenidoFound.getPlataformas());
+            guardarTipoContenido(tipoContenidoToUpdate);
+            return new LinkedHashMap<>() {
+                {
+                    put("message", "El tipo de contenido ha sido actualizado.");
+                }
+            };
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
+        }
+    }
+
     @Transactional
     public Map<Object, Object> agregarPlataforma(Map<Object, Object> valores) {
         try {
@@ -72,6 +92,24 @@ public class TipoContenidoService {
             return new LinkedHashMap<>() {
                 {
                     put("message", "Se ha agregado la plataforma al tipo de contenido.");
+                }
+            };
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
+        }
+    }
+
+    public Map<Object, Object> eliminarTipoContenido(Object id) {
+        try {
+            int parsedId = Integer.parseInt(id.toString());
+
+            tipoContenidoRepository.findById(parsedId)
+                    .orElseThrow(() -> new TipoContenidoNotFound("El tipo contenido ingresado no existe."));
+            tipoContenidoRepository.deleteById(parsedId);
+
+            return new LinkedHashMap<>() {
+                {
+                    put("message", "El tipo contenido ha sido eliminado.");
                 }
             };
         } catch (NumberFormatException e) {

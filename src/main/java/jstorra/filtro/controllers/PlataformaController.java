@@ -29,8 +29,18 @@ public class PlataformaController {
         return plataformaService.guardarPlataforma(plataforma);
     }
 
+    @PutMapping("/{id}")
+    public Map<Object, Object> editarPlataforma(@PathVariable Object id, @RequestBody Plataforma plataforma) {
+        return plataformaService.editarPlataforma(id, plataforma);
+    }
+
     @PostMapping("/agregarContenido")
     public Map<Object, Object> agregarTipoContenido(@RequestBody Map<Object, Object> valores) {
         return plataformaService.agregarTipoContenido(valores);
+    }
+
+    @DeleteMapping("/{id}")
+    public Map<Object, Object> eliminarPlataforma(@PathVariable Object id) {
+        return plataformaService.eliminarPlataforma(id);
     }
 }

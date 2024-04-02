@@ -3,6 +3,7 @@ package jstorra.filtro.services;
 import jakarta.transaction.Transactional;
 import jstorra.filtro.exceptions.InvalidFormatException;
 import jstorra.filtro.exceptions.PlataformaDuplicateException;
+import jstorra.filtro.exceptions.PlataformaNotFound;
 import jstorra.filtro.exceptions.TipoContenidoNotFound;
 import jstorra.filtro.models.Plataforma;
 import jstorra.filtro.models.TipoContenido;
@@ -54,6 +55,25 @@ public class PlataformaService {
         }
     }
 
+    public Map<Object, Object> editarPlataforma(Object id, Plataforma plataformaToUpdate) {
+        try {
+            int parsedId = Integer.parseInt(id.toString());
+
+            plataformaRepository.findById(parsedId)
+                    .orElseThrow(() -> new PlataformaNotFound("La plataforma ingresada no existe."));
+
+            plataformaToUpdate.setId(parsedId);
+            guardarPlataforma(plataformaToUpdate);
+            return new LinkedHashMap<>() {
+                {
+                    put("message", "La plataforma ha sido actualizado.");
+                }
+            };
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
+        }
+    }
+
     @Transactional
     public Map<Object, Object> agregarTipoContenido(Map<Object, Object> valores) {
         try {
@@ -72,6 +92,24 @@ public class PlataformaService {
             return new LinkedHashMap<>() {
                 {
                     put("message", "Se ha agregado el tipo de contenido a la plataforma.");
+                }
+            };
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
+        }
+    }
+
+    public Map<Object, Object> eliminarPlataforma(Object id) {
+        try {
+            int parsedId = Integer.parseInt(id.toString());
+
+            plataformaRepository.findById(parsedId)
+                    .orElseThrow(() -> new PlataformaNotFound("La plataforma ingresada no existe."));
+            plataformaRepository.deleteById(parsedId);
+
+            return new LinkedHashMap<>() {
+                {
+                    put("message", "La plataforma ha sido eliminada.");
                 }
             };
         } catch (NumberFormatException e) {

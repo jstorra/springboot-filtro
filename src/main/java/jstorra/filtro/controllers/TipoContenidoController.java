@@ -29,8 +29,18 @@ public class TipoContenidoController {
         return tipoContenidoService.guardarTipoContenido(tipoContenido);
     }
 
+    @PutMapping("/{id}")
+    public Map<Object, Object> editarTipoContenido(@PathVariable Object id, @RequestBody TipoContenido tipoContenido) {
+        return tipoContenidoService.editarTipoContenido(id, tipoContenido);
+    }
+
     @PostMapping("/agregarPlataforma")
     public Map<Object, Object> agregarPlataforma(@RequestBody Map<Object, Object> valores) {
         return tipoContenidoService.agregarPlataforma(valores);
+    }
+
+    @DeleteMapping("/{id}")
+    public Map<Object, Object> eliminarTipoContenido(@PathVariable Object id) {
+        return tipoContenidoService.eliminarTipoContenido(id);
     }
 }

@@ -15,7 +15,7 @@ public class Plataforma {
     @Column(name = "nombre", nullable = false, unique = true)
     private String nombre;
 
-    @ManyToMany(mappedBy = "plataformas", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "plataformas", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<TipoContenido> tipocontenidos;
 
