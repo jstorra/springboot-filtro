@@ -7,7 +7,6 @@ import jstorra.filtro.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +86,7 @@ public class UsuarioService {
             Usuario usuario = usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
 
             usuarioRepository.deleteById(parsedId);
+
             return new LinkedHashMap<>() {{
                 put("message", "El usuario ha sido eliminado.");
             }};

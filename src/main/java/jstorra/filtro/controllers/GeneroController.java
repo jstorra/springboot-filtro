@@ -33,4 +33,14 @@ public class GeneroController {
     public Map<Object, Object> guardarGenero(@RequestBody Genero genero) {
         return generoService.guardarGenero(genero);
     }
+
+    @PutMapping("/{id}")
+    public Map<Object, Object> editarGenero(@PathVariable Object id, @RequestBody Genero genero) {
+        return generoService.editarGenero(id, genero);
+    }
+
+    @DeleteMapping("/{id}")
+    public Map<Object, Object> eliminarGenero(@PathVariable Object id) {
+        return generoService.eliminarGenero(id);
+    }
 }

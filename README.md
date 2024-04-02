@@ -28,7 +28,7 @@ Proyecto enfocado en la gestion de contenidos audiovisuales para usuarios regist
 - Abre el proyecto en tu IDE.
 
 > [!IMPORTANT]
-> Antes de ejecutar el proyecto debes haber creado la base de datos, ejecuta el siguiente código [DB](./src/main/resources/DB.sql) en tu DBMS MySQL.
+> Antes de ejecutar el proyecto debes haber creado la base de datos, ejecuta el siguiente código [DB](./src/main/resources/static/DB.sql) en tu DBMS MySQL.
 
 - Cambie [application.properties](./src/main/resources/application.properties) en caso de que haya modificado sus propiedades de MySQL como host, puerto, nombre de usuario o incluso la contraseña.
 

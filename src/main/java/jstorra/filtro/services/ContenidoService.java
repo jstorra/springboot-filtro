@@ -160,6 +160,7 @@ public class ContenidoService {
             Contenido contenido = contenidoRepository.findById(parsedId).orElseThrow(() -> new ContenidoNotFound("El contenido ingresado no existe."));
 
             contenidoRepository.deleteById(parsedId);
+
             return new LinkedHashMap<>() {{
                 put("message", "El contenido ha sido eliminado.");
             }};

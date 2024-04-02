@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import jstorra.filtro.exceptions.InvalidFormatException;
 import jstorra.filtro.exceptions.PlataformaDuplicateException;
 import jstorra.filtro.exceptions.TipoContenidoNotFound;
-import jstorra.filtro.models.Genero;
 import jstorra.filtro.models.Plataforma;
 import jstorra.filtro.models.TipoContenido;
 import jstorra.filtro.repositories.PlataformaRepository;

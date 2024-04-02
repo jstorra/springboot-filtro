@@ -1,14 +1,12 @@
 package jstorra.filtro.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jstorra.filtro.models.Genero;
 import jstorra.filtro.models.Plataforma;
 import jstorra.filtro.services.PlataformaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -29,6 +27,4 @@ public class PlataformaController {
     public Map<Object, Object> agregarTipoContenido(@RequestBody Map<Object, Object> valores) {
         return plataformaService.agregarTipoContenido(valores);
     }
-
-
 }
