@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,6 +18,16 @@ import java.util.Map;
 public class ContenidoController {
     @Autowired
     ContenidoService contenidoService;
+
+    @GetMapping
+    public List<Map<Object, Object>> obtenerContenidos() {
+        return contenidoService.obtenerContenidos();
+    }
+
+    @GetMapping("/{id}")
+    public Map<Object, Object> obtenerContenidoPorId(@PathVariable Object id) {
+        return contenidoService.obtenerContenidoPorId(id);
+    }
 
     @PostMapping
     public Map<Object, Object> guardarContenido(@RequestBody ContenidoDTO contenidoDTO) {

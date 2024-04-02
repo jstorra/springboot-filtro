@@ -1,6 +1,7 @@
 package jstorra.filtro.controllers;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jstorra.filtro.exceptions.InvalidEmailException;
 import jstorra.filtro.models.Contenido;
 import jstorra.filtro.models.Usuario;
 import jstorra.filtro.security.JWTAuthenticationConfig;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/usuario")
@@ -23,6 +26,16 @@ public class UsuarioController {
 
     @Autowired
     UsuarioService usuarioService;
+
+    @GetMapping
+    public List<Map<Object, Object>> obtenerUsuarios() {
+        return usuarioService.obtenerUsuarios();
+    }
+
+    @GetMapping("/{id}")
+    public Map<Object, Object> obtenerUsuarios(@PathVariable Object id) {
+        return usuarioService.obtenerUsuarioPorId(id);
+    }
 
     @PostMapping("/ingresar")
     public Usuario ingresar(
@@ -40,7 +53,24 @@ public class UsuarioController {
             @RequestParam("email") String email,
             @RequestParam("contraseña") String contraseña) {
 
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+
+        if (!matcher.matches())
+            throw new InvalidEmailException("El correo ingresado no tiene un formato valido.");
+
         return usuarioService.registrarUsuario(new Usuario(nombre, email, contraseña, null));
+    }
+
+    @PutMapping("/{id}")
+    public Map<Object, Object> editarUsuario(
+            @RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("contraseña") String contraseña,
+            @PathVariable Object id) {
+
+        return usuarioService.editarUsuario(id, new Usuario(nombre, email, contraseña, null));
     }
 
     @DeleteMapping("/{id}")

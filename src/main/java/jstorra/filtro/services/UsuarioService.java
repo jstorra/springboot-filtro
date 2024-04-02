@@ -7,6 +7,7 @@ import jstorra.filtro.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,36 @@ import java.util.Map;
 public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
+
+    public List<Map<Object, Object>> obtenerUsuarios() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        return usuarios.stream()
+                .map(usuario -> {
+                    Map<Object, Object> usuarioMap = new LinkedHashMap<>();
+                    usuarioMap.put("id", usuario.getId());
+                    usuarioMap.put("nombre", usuario.getNombre());
+                    usuarioMap.put("email", usuario.getEmail());
+                    usuarioMap.put("contraseña", usuario.getContraseña());
+                    return usuarioMap;
+                })
+                .toList();
+    }
+
+    public Map<Object, Object> obtenerUsuarioPorId(Object id) {
+        try {
+            int parsedId = Integer.parseInt(id.toString());
+
+            Usuario usuario = usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
+            return new LinkedHashMap<>() {{
+                put("id", usuario.getId());
+                put("nombre", usuario.getNombre());
+                put("email", usuario.getEmail());
+                put("contraseña", usuario.getContraseña());
+            }};
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
+        }
+    }
 
     public void validacionUsuario(String email, String contraseña) {
         Usuario usuario = usuarioRepository.findByEmail(email);
@@ -31,6 +62,21 @@ public class UsuarioService {
             }};
         } catch (Exception e) {
             throw new UsuarioDuplicateException("El correo ingresado ya esta asociado a otro usuario.");
+        }
+    }
+
+    public Map<Object, Object> editarUsuario(Object id, Usuario usuarioToUpdate) {
+        try {
+            int parsedId = Integer.parseInt(id.toString());
+
+            Usuario usuario = usuarioRepository.findById(parsedId).orElseThrow(() -> new UsuarioNotFound("El usuario ingresado no existe."));
+            usuarioToUpdate.setId(parsedId);
+            registrarUsuario(usuarioToUpdate);
+            return new LinkedHashMap<>() {{
+                put("message", "El usuario ha sido actualizado.");
+            }};
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
         }
     }
 

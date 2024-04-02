@@ -6,6 +6,7 @@ import jstorra.filtro.models.dto.ContenidoDTO;
 import jstorra.filtro.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
@@ -25,6 +26,61 @@ public class ContenidoService {
 
     @Autowired
     UsuarioRepository usuarioRepository;
+
+    public List<Map<Object, Object>> obtenerContenidos() {
+        List<Contenido> contenidos = contenidoRepository.findAll();
+        return contenidos.stream()
+                .map(contenido -> {
+                    Map<Object, Object> contenidoMap = new LinkedHashMap<>();
+                    contenidoMap.put("id", contenido.getId());
+                    contenidoMap.put("nombre", contenido.getNombre());
+                    contenidoMap.put("tipoContenido", contenido.getTipoContenido());
+                    contenidoMap.put("genero1", contenido.getGenero1());
+                    contenidoMap.put("genero2", contenido.getGenero2());
+                    contenidoMap.put("estado", contenido.getEstado());
+                    contenidoMap.put("plataforma", contenido.getPlataforma());
+                    contenidoMap.put("calificacion", contenido.getCalificacion());
+                    contenidoMap.put("comentario", contenido.getComentario());
+                    contenidoMap.put("usuario", new LinkedHashMap<>() {{
+                        put("id", contenido.getUsuario().getId());
+                        put("nombre", contenido.getUsuario().getNombre());
+                        put("email", contenido.getUsuario().getEmail());
+                        put("contraseña", contenido.getUsuario().getContraseña());
+                    }});
+                    return contenidoMap;
+                })
+                .toList();
+    }
+
+    public Map<Object, Object> obtenerContenidoPorId(@PathVariable Object id) {
+        try {
+            int parsedId = Integer.parseInt(id.toString());
+
+            Contenido contenido = contenidoRepository.findById(parsedId).orElseThrow(() -> new ContenidoNotFound("El contenido ingresado no existe."));
+
+            contenidoRepository.deleteById(parsedId);
+
+            return new LinkedHashMap<>() {{
+                put("id", contenido.getId());
+                put("nombre", contenido.getNombre());
+                put("tipoContenido", contenido.getTipoContenido());
+                put("genero1", contenido.getGenero1());
+                put("genero2", contenido.getGenero2());
+                put("estado", contenido.getEstado());
+                put("plataforma", contenido.getPlataforma());
+                put("calificacion", contenido.getCalificacion());
+                put("comentario", contenido.getComentario());
+                put("usuario", new LinkedHashMap<>() {{
+                    put("id", contenido.getUsuario().getId());
+                    put("nombre", contenido.getUsuario().getNombre());
+                    put("email", contenido.getUsuario().getEmail());
+                    put("contraseña", contenido.getUsuario().getContraseña());
+                }});
+            }};
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException("Los parametros ingresados no tienen un formato valido.");
+        }
+    }
 
     public Map<Object, Object> guardarContenido(ContenidoDTO contenidoDTO) {
         Contenido contenido = new Contenido();
@@ -64,7 +120,7 @@ public class ContenidoService {
 
         contenido.setPlataforma(plataforma);
 
-        if (contenidoDTO.getCalificacion() != null || contenidoDTO.getComentario() != null && (contenidoDTO.getEstado().equalsIgnoreCase("Abandonado") || contenidoDTO.getEstado().equalsIgnoreCase("Terminado"))) {
+        if ((contenidoDTO.getCalificacion() != null || contenidoDTO.getComentario() != null) && (contenidoDTO.getEstado().equalsIgnoreCase("Abandonado") || contenidoDTO.getEstado().equalsIgnoreCase("Terminado"))) {
             contenido.setCalificacion(contenidoDTO.getCalificacion());
             contenido.setComentario(contenidoDTO.getComentario());
         } else {

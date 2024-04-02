@@ -29,6 +29,7 @@ public class Usuario {
     private String token;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Contenido> contenidos;
 
     public Usuario(){
