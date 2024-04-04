@@ -125,6 +125,8 @@ El controlador de **Contenido** contiene 5 endpoints:
 
 ![](./img/contenido.png)
 
+- **Estados Contenido:** Los unicos estados que se podran asignar a los contenido son **Pendiente**, **Viendo**, **Terminado**, **Abandonado** y **En Pausa**.
+
 > Los endpoints funcionan de la misma manera, simplemente damos click en la consulta a realizar y se desplegara los parametros o valores que se requieren para su funcionamiento, [+info](#openapi-definition-contenido-controller).
 
 </details>
@@ -1701,7 +1703,7 @@ System.out.println(response.toString());
     "tipo_id": 0,
     "genero1_id": 0,
     "genero2_id": 0,
-    "estado": "string",
+    "estado": "string", // Pendiente, Viendo, Terminado, Abandonado, En pausa.
     "plataforma_id": 0,
     "calificacion": 0.1,
     "comentario": "string",
@@ -1881,7 +1883,7 @@ System.out.println(response.toString());
     "tipo_id": 0,
     "genero1_id": 0,
     "genero2_id": 0,
-    "estado": "string",
+    "estado": "string", // Pendiente, Viendo, Terminado, Abandonado, En pausa.
     "plataforma_id": 0,
     "calificacion": 0.1,
     "comentario": "string",
